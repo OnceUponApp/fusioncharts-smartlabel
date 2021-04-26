@@ -1090,7 +1090,8 @@ SmartLabelManager.prototype.getSmartText = function (text, maxWidth, maxHeight, 
         }
 
         // Calculate width with ellipses
-        text = fastTrim(text).replace(/(\s+)/g, ' ');
+		console.log('skip trim');
+        // text = fastTrim(text).replace(/(\s+)/g, ' ');
         maxWidthWithEll = this._showNoEllipses ? maxWidth : (maxWidth - ellipsesWidth);
 
         // Checks if any html tag is present. This if block is executed for all normal texts and

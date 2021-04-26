@@ -199,6 +199,7 @@ var lib = {
 				parsedStyle.fontWeight = style.fontWeight || style['font-weight'] || 'normal';
 				parsedStyle.fontStyle = style.fontStyle || style['font-style'] || 'normal';
 				parsedStyle.fontFamily = style.fontFamily || style['font-family'] || 'Verdana,sans';
+				parsedStyle.letterSpacing = style.letterSpacing || style['letter-spacing'] || 0;
 
 				parsedStyle.fontSize += parsedStyle.fontSize.indexOf('px') === -1 ? 'px' : '';
 				return parsedStyle;
@@ -251,15 +252,16 @@ var lib = {
 			 * Returns the height and width of a text using the canvas.measureText API.
 			 * Used for calculating width in browsers supporting html canvas.
 			 * In case canvas is not present, <div> is used for calculation as a fallback solution
-			 * 
+			 *
 			 * @param {any} text -  text. Can be array or string.
-			 * 
+			 *
 			 * @return {Object} - width and height.
 			 */
 			_getDimentionUsingCanvas: function (text = '', sl) {
 				var ctx = sl.ctx,
 					style = sl.style,
-					height = lib._getCleanHeight(style.lineHeight);
+					height = lib._getCleanHeight(style.lineHeight),
+					spacing = style.letterSpacing ? style.letterSpacing : 0;
 
 				// In case text is string, remove <br /> from it.
 				if (!(text instanceof Array)) {
@@ -271,7 +273,7 @@ var lib = {
 				}
 
 				return {
-					width: ctx.measureText(text).width,
+					width: ctx.measureText(text).width + text.length * spacing,
 					height: height
 				};
 			},
@@ -279,9 +281,9 @@ var lib = {
 			/**
 			 * Checks if text contains any <br /> tag. If yes, it returns all the indexes of it.
 			 * Else, it returns undefined.
-			 * 
+			 *
 			 * @param {string} input -  text which is to be examined for <br /> tag
-			 * 
+			 *
 			 * @returns {boolean} - whether text contains only <br> tag
 			 */
 			_hasOnlyBRTag: function (input = '') {
@@ -290,7 +292,7 @@ var lib = {
 
 			/**
 			 * For a text containing <br /> it returns the height and width of the text
-			 * 
+			 *
 			 */
 			_getDimentionOfMultiLineText: function (rawText = '', sl) {
 				var i,
